@@ -6,3 +6,5 @@ https://core.telegram.org/bots/api#senddocument
 
 // get bot details
 curl https://api.telegram.org/bot{TOKEN}/getUpdates | jq .
+
+that's all folks
