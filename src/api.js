@@ -22,11 +22,12 @@ app.get('/one', function(req,res){
 });
 
 app.post('/hook', function(req,res){ 
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   console.log(req.body);
 
 //  const logData = new Date().getTime() +
   const logData = new Date().toISOString() +
-    ': ' +
+    ' (' + ip + '): ' +
     JSON.stringify(req.body, null, 0) + '\n';
 
   fs.appendFile('/tmp/github_hook.log', logData, function (err) {
