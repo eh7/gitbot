@@ -1,6 +1,6 @@
-name: 'Action Name'
-description: 'Action Description'
-author: '<author name>'
+name: 'Send notification to telegram'
+description: 'Send a notification to the telegram bot'
+author: 'Gavin'
 inputs: 
   chat:
     description: 'Chat to send: chat id or @channel_name'
