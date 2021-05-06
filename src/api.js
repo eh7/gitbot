@@ -23,11 +23,18 @@ app.get('/', function(req,res){
 
 app.post('/hook', async function(req,res){ 
 
+  let secret = false;
+
+  if (req.headers.secret === process.env.SECRET) {
+    secret = true;
+  }
+
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   console.log(req.body);
 
-  await gitHubHook.reqBody(req.body);
+  await gitHubHook.reqBody({ secret, body: req.body });
+
   // await gitHubHook.evresp('req.body');
 
   const logData = new Date().toISOString() +
@@ -36,7 +43,7 @@ app.post('/hook', async function(req,res){
 
   fs.appendFile('/tmp/github_hook.log', logData, function (err) {
     if (err) throw err;
-    res.send("<h2>POST /hook , Have a nice day -- toekn -> " + TOKEN + ' -- ' + CHART_ID + '</h2>');
+    res.send("<h2>POST /hook , Have a nice day -- token -> " + TOKEN + ' -- ' + CHART_ID + '</h2>');
   });
 });
 
