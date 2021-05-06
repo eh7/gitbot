@@ -4,6 +4,7 @@
   "description": "gitbot to send notifications from github to telegram",
   "main": "index.js",
   "scripts": {
+    "api:run": "node src/api.js",
     "test:build": "babel tests/ -d dist/ --ignore ./**/dist/* --ignore ./**.test.js --copy-files",
     "test:run": "npm run test:build && node dist/testInclude.js",
     "build": "ncc build src/index.js -C -m -o dist",
