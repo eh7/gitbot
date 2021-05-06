@@ -29,6 +29,10 @@ app.post('/hook', async function(req,res){
     secret = true;
   }
 
+  if (!secret) {
+    return res.send('<h2>Yuour names not down your not gettinh in!</h2>');
+  }
+
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   console.log(req.body);
