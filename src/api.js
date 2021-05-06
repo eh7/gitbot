@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var app = express(); 
 var fs = require('fs');
 
-var GitHubHook = require('./service/github').GitHubHook;
 
 //console.log(Date());
 //process.exit();
@@ -13,8 +12,11 @@ app.use(bodyParser.json())
 
 require('dotenv').config()
 
+const GitHubHook = require('./service/github').GitHubHook;
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHART_ID = process.env.TELEGRAM_CHAT_ID;
+
+const gitHubHook = new GitHubHook(TOKEN, CHART_ID);
 
 app.get('/', function(req,res){ 
   res.send("<h2>Hi there, thanks for checking out my work. The server that is responding to you is developed using 'express.js' module in node.js. Please type 'localhost:3000/one' in your URL search bar to view the next page.</h2>");
@@ -29,8 +31,6 @@ app.post('/hook', async function(req,res){
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   console.log(req.body);
-
-  const gitHubHook = new GitHubHook(TOKEN, CHART_ID);
 
   await gitHubHook.reqBody(req.body);
   // await gitHubHook.evresp('req.body');
