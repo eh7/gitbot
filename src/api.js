@@ -25,12 +25,12 @@ app.post('/hook', async function(req,res){
 
   let secret = false;
 
-  if (req.headers.secret === process.env.SECRET) {
+  if (req.headers.secret === process.env.GH_SECRET) {
     secret = true;
   }
 
   if (!secret) {
-    return res.send('<h2>Yuour names not down your not gettinh in!</h2>');
+    return res.send('<h2>Your names not down your not gettinh in!</h2>');
   }
 
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -60,9 +60,24 @@ if (process.env.HTTPS) {
     process.env.TLS_CRT || '/home/gavin/certbot/config/live/vps00.eh7.co.uk/cert.pem',
     'utf8'
   );
+  const chainLines = fs.readFileSync(
+    process.env.TLS_CHAIN || '/home/gavin/certbot/config/live/vps00.eh7.co.uk/chain.pem',
+    'utf8'
+  ).split("\n");
+  // console.log(chainLines);
+  var cert = [];
+  var ca = [];
+  chainLines.forEach(function(line) {
+    cert.push(line);
+    if (line.match(/-END CERTIFICATE-/)) {
+      ca.push(cert.join("\n"));
+      cert = [];
+    }
+  });
   https.createServer({
-    key: privateKey,
-    cert: certificate
+    "key": privateKey,
+    "cert": certificate,
+    "ca": ca
   }, app).listen(3000, "0.0.0.0", function() { 
     console.log("TLS Server listening on port: 3000");
   });
